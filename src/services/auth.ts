@@ -15,7 +15,7 @@ class AuthService {
         throw new Error("Error al cargar los datos");
       }
       const json = await res.json();
-      localStorage.setItem("token", json.data.token);
+      localStorage.setItem("auth", JSON.stringify(json.data));
 
       return {
         info: json,

@@ -1,21 +1,41 @@
 import { createContext, useState } from "react";
 
 type AuthType = {
-  auth: string;
-  setAuth: React.Dispatch<React.SetStateAction<string>>;
+  token: string;
+  user: {
+    id: string;
+    name: string;
+  };
 };
-export const AuthContext = createContext<AuthType | null>(null);
+
+type ContextAuthType = {
+  auth: AuthType;
+  changeAuth: (params: AuthType) => void;
+};
+export const AuthContext = createContext<ContextAuthType | null>(null);
 
 export const Provider = ({ children }: { children: any }) => {
+  const localAuthData = JSON.parse(localStorage.getItem("auth") || "");
+  console.log(localAuthData);
+
   const [auth, setAuth] = useState(
-    localStorage.getItem("token") || ("" as string)
+    localAuthData
+      ? localAuthData
+      : {
+          token: "",
+          user: {
+            id: "",
+            name: "",
+          },
+        }
   );
+  const changeAuth = (params: AuthType) => [setAuth(params)];
 
   return (
     <AuthContext.Provider
       value={{
         auth,
-        setAuth,
+        changeAuth,
       }}
     >
       {children}

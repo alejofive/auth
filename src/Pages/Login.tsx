@@ -13,11 +13,15 @@ const Login = () => {
     e.preventDefault();
     const data = await authService.login(register);
     if (data.info) {
-      console.log(data.info)  ;
-      authContext?.setAuth(data.info.data.token);
+      authContext?.changeAuth({
+        token: data.info.data.token,
+        user: {
+          ...data.info.data.user,
+        },
+      });
       setRegister({ email: "", password: "" });
     } else {
-      alert("No existe el email");
+      alert("Usuario o contraseña incorrecta");
     }
 
     console.log(data);
